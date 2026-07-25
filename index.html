@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Grenier Ourivesaria</title>
+<meta name="description" content="Joalheria artesanal. Cada peca, um projeto.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..500&family=Red+Hat+Display:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ===== GRENIER — copia da estrutura/estilo do tomwoodproject.com,
+   trocando SO as fontes pelo trio Fraunces / Red Hat Display / Space Mono.
+   Regras do site: cantos SEMPRE retos (border-radius 0), base branca,
+   texto preto, faixas pretas (aviso/footer), quente da pele SO em
+   blocos de produto/foto, grupos de footer empilhados na vertical. ===== */
+:root{
+  --paper:#fff; --ink:#000; --muted:#8f8a85;
+  --w1:#f0e6da; --w2:#e9dccb; --w3:#e1d0bb; --w4:#d7bfa3; --w5:#cdb08c; --w6:#c2a179;
+  --sans:"Red Hat Display",system-ui,-apple-system,Arial,sans-serif;
+  --serif:"Fraunces",Georgia,"Times New Roman",serif;
+  --mono:"Space Mono","Courier New",monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box;border-radius:0}
+input,button,textarea,select{border-radius:0;-webkit-appearance:none;appearance:none;font-family:inherit}
+html{-webkit-text-size-adjust:100%}
+body{font-family:var(--sans);font-size:16px;line-height:1.5;color:var(--ink);background:var(--paper);-webkit-font-smoothing:antialiased}
+img,svg,video{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+ul{list-style:none}
+h1,h2{font-family:var(--serif);font-weight:500;letter-spacing:-0.25px;line-height:1.0}
+.h2{font-size:clamp(30px,5vw,45px)}
+
+/* 1 — ANUNCIO + HERO (video claro, nav preta sobreposta) */
+.announce{background:#000;color:#fff;text-align:center;font-size:12px;letter-spacing:.01em;padding:4px 12px}
+.hero{position:relative;height:92vh;min-height:560px;overflow:hidden;background:var(--w1)}
+.hero .media{position:absolute;inset:0}
+.hero .media img,.hero .media video{width:100%;height:100%;object-fit:cover}
+.nav{position:absolute;top:0;left:0;right:0;z-index:5;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:12px 12px;color:#000}
+.nav>*{position:relative}
+.nav .menu{display:flex;gap:16px;justify-self:start}
+.nav .acts{display:flex;gap:18px;align-items:center;justify-self:end}
+.nav .acts .cart{font-size:13px}
+.icn{width:20px;height:20px;stroke:#000;stroke-width:1.3;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.brand{justify-self:center;display:flex;flex-direction:column;align-items:center;gap:5px}
+/* LOGO: troque este SVG pelo seu arquivo preto/transparente -> assets/img/logo.svg */
+.brand .word{font-weight:600;letter-spacing:.34em;font-size:14px;padding-left:.34em}
+.hero .enter{position:absolute;left:0;right:0;bottom:24px;text-align:center;color:#000;font-weight:500;font-size:12px;letter-spacing:.14em;text-transform:uppercase}
+
+/* linhas de produtos / categorias (arraste, sem barra) */
+.ribbon{display:flex;gap:4px;overflow-x:auto;cursor:grab;scrollbar-width:none}
+.ribbon::-webkit-scrollbar{display:none}
+.ribbon.drag{cursor:grabbing}
+.cat{flex:0 0 clamp(180px,24vw,360px);position:relative;aspect-ratio:3/4;overflow:hidden;user-select:none}
+.cat .lab{position:absolute;left:16px;bottom:14px;color:#fff;font-weight:500;font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+.p10{flex:0 0 clamp(150px,18vw,240px);user-select:none}
+.p10 .ph{aspect-ratio:1/1;background:var(--w2);overflow:hidden}
+.p10 .n{font-family:var(--serif);font-size:15px;margin-top:9px}
+.p10 .pr{font-size:12px;margin-top:1px}
+
+/* 3 — MANIFESTO (bloco titulo + lede, estilo lookbook) */
+.manifesto{text-align:center;padding:96px 24px;max-width:640px;margin:0 auto}
+.manifesto p{font-family:var(--mono);font-size:15px;line-height:1.75;color:#000;margin-top:20px}
+
+/* 4 — LOOKS */
+.looks{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+.look{position:relative;aspect-ratio:4/5;overflow:hidden}
+.look .lab{position:absolute;left:0;right:0;bottom:22px;text-align:center;color:#fff;font-weight:500;font-size:14px;letter-spacing:.1em;text-transform:uppercase}
+
+/* 5 — CICLOS (croqui -> peca no hover) */
+.ciclos{text-align:center;padding:96px 24px}
+.ciclos p{font-family:var(--mono);font-size:15px;line-height:1.75;color:#000;max-width:600px;margin:18px auto 34px}
+.swap{position:relative;max-width:660px;margin:0 auto;aspect-ratio:16/10;overflow:hidden;background:var(--w1)}
+.swap .croqui,.swap .rend{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;transition:opacity .5s ease}
+.swap .rend{opacity:0}
+.swap:hover .rend{opacity:1}.swap:hover .croqui{opacity:0}
+.swap .rend .ph{width:100%;height:100%;object-fit:cover;background:var(--w4)}
+
+/* 6 — BLOCO (peca em destaque) */
+.split{display:grid;grid-template-columns:1fr 1fr;min-height:520px}
+.split .media{background:var(--w2)}
+.split .body{display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-start;gap:14px;padding:48px}
+.split .body h2{font-size:34px}
+.split .body .lk{font-weight:500;font-size:13px;letter-spacing:.1em;text-transform:uppercase;border-bottom:1px solid #000;padding-bottom:3px}
+
+/* 7 — CONCEITUAL */
+.concept{height:72vh;min-height:440px;background:var(--w5)}
+
+/* 8 — DUAS PECAS */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:44px;padding:96px clamp(24px,6vw,80px)}
+.two .ph{aspect-ratio:4/5;background:var(--w2);overflow:hidden;margin-bottom:14px}
+.two .n{font-family:var(--serif);font-size:20px}
+.two .pr{font-size:12px;margin-top:3px;color:#000}
+
+/* slot video */
+.vslot{aspect-ratio:21/9;background:var(--w1);margin:4px}
+
+/* 10 — FOOTER (newsletter + links VERTICAIS + wordmark) */
+.foot{background:#000;color:#fff;padding:56px 12px 28px}
+.foot-top{display:grid;grid-template-columns:1fr 360px;gap:40px 56px;max-width:1100px}
+.foot .signup{max-width:520px}
+.foot .signup h3{font-family:var(--mono);font-weight:400;font-size:16px;line-height:1.4;color:#fff}
+.foot .signup form{display:flex;align-items:center;margin-top:18px;border-bottom:1px solid rgba(255,255,255,.4)}
+.foot .signup input{flex:1;border:0;background:transparent;color:#fff;padding:10px 2px;font-size:14px}
+.foot .signup input::placeholder{color:rgba(255,255,255,.5)}
+.foot .signup button{border:0;background:#fff;color:#000;font-weight:500;font-size:13px;letter-spacing:.02em;text-transform:uppercase;padding:12px 16px;cursor:pointer;margin-left:12px}
+.foot .links{display:block}
+.foot .group{margin-bottom:32px}
+.foot h4{font-family:var(--sans);font-weight:500;font-size:11px;letter-spacing:.02em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:6px}
+.foot li{font-size:15px;line-height:1.5;color:#fff}
+.foot li a{color:#fff}
+.foot li a:hover{color:rgba(255,255,255,.6)}
+.foot .wordmark{text-align:center;border-top:1px solid rgba(255,255,255,.14);margin-top:36px;padding-top:30px}
+.foot .wordmark .g{font-family:var(--sans);font-weight:700;letter-spacing:.36em;font-size:clamp(34px,9vw,84px);padding-left:.36em}
+.foot .wordmark .o{font-size:12px;letter-spacing:.5em;color:rgba(255,255,255,.5);padding-left:.5em;margin-top:6px}
+.foot .legal{text-align:center;font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.4);margin-top:22px}
+
+@media(max-width:760px){
+  .looks,.split,.two,.foot-top{grid-template-columns:1fr}
+  .split .body{padding:32px 24px}
+  .two{padding:56px 24px;gap:32px}
+}
+</style>
+</head>
+<body>
+
+<!-- 1 · ANUNCIO + HERO -->
+<div class="announce">Venda consultiva &middot; O tempo, solido</div>
+<section class="hero">
+  <div class="media">
+    <!-- HERO: seu video em cores claras.
+         <video autoplay muted loop playsinline poster="assets/img/hero-poster.jpg"><source src="assets/img/hero.mp4" type="video/mp4"></video> -->
+  </div>
+  <nav class="nav">
+    <div class="menu">
+      <svg class="icn" viewBox="0 0 24 24"><line x1="3" y1="8" x2="21" y2="8"/><line x1="3" y1="16" x2="21" y2="16"/></svg>
+      <svg class="icn" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
+    </div>
+    <a class="brand" href="index.html" aria-label="Grenier Ourivesaria">
+      <!-- LOGO stand-in (preto). Substitua por: <img class="logo" src="assets/img/logo.svg" alt="Grenier"> -->
+      <svg width="220" height="76" viewBox="0 0 380 130" aria-hidden="true">
+        <defs><mask id="glg"><rect width="380" height="130" fill="#fff"/><circle cx="190" cy="64" r="27" fill="#000"/><rect x="34" y="57" width="312" height="14" fill="#fff"/><rect x="196" y="18" width="22" height="41" fill="#000"/></mask></defs>
+        <rect x="34" y="57" width="312" height="14" fill="#000"/>
+        <circle cx="190" cy="64" r="42" fill="#000" mask="url(#glg)"/>
+        <rect x="181" y="64" width="13" height="27" fill="#000"/>
+        <rect x="197" y="30" width="11" height="28" fill="#000"/>
+      </svg>
+      <span class="word">GRENIER</span>
+    </a>
+    <div class="acts">
+      <svg class="icn" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4.5 21c0-4.4 3.4-7.5 7.5-7.5s7.5 3.1 7.5 7.5"/></svg>
+      <svg class="icn" viewBox="0 0 24 24"><path d="M6 8h12l-1 12H7L6 8z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
+      <span class="cart">(0)</span>
+    </div>
+  </nav>
+  <a class="enter" href="#ciclos">Colecao Ciclos&nbsp;&nbsp;&rarr;</a>
+</section>
+
+<!-- 2 · CATEGORIAS (tiles, sem titulo — como no Tom Wood) -->
+<section>
+  <div class="ribbon" data-drag style="padding:4px">
+    <a class="cat" style="background:var(--w2)"><span class="lab">Maos</span></a>
+    <a class="cat" style="background:var(--w3)"><span class="lab">Pulsos</span></a>
+    <a class="cat" style="background:var(--w4)"><span class="lab">Pescoco</span></a>
+    <a class="cat" style="background:var(--w5)"><span class="lab">Orelhas</span></a>
+    <a class="cat" style="background:var(--w6)"><span class="lab">Corpo</span></a>
+  </div>
+</section>
+
+<!-- 3 · MANIFESTO -->
+<section class="manifesto">
+  <h2 class="h2">Cada peca, um projeto.</h2>
+  <p>Arquiteto antes de joalheiro. A joia nasce de um desenho resolvido e nao esconde do que e feita — verdade ao material, o tempo tornado solido.</p>
+</section>
+
+<!-- 4 · LOOKS -->
+<section class="looks">
+  <a class="look" style="background:var(--w3)"><span class="lab">Aneis&nbsp;&rarr;</span></a>
+  <a class="look" style="background:var(--w5)"><span class="lab">Pendentes&nbsp;&rarr;</span></a>
+</section>
+
+<!-- 5 · CICLOS -->
+<section class="ciclos" id="ciclos">
+  <h2 class="h2">Ciclos</h2>
+  <p>O desenho precede a peca. Passe o mouse: o croqui vira objeto — o projeto convertido em prata permanente.</p>
+  <div class="swap">
+    <div class="croqui">
+      <svg viewBox="0 0 320 200" width="320" fill="none" stroke="#000" stroke-width="1.3" stroke-linecap="round">
+        <ellipse cx="160" cy="110" rx="66" ry="68"/><ellipse cx="160" cy="110" rx="44" ry="46"/>
+        <path d="M108 60 Q160 30 212 60 L204 76 Q160 50 116 76 Z"/>
+        <path d="M160 30 L160 12" stroke-dasharray="4 5"/>
+      </svg>
+    </div>
+    <div class="rend"><div class="ph"></div></div>
+  </div>
+</section>
+
+<!-- 6 · PECA EM DESTAQUE -->
+<section class="split">
+  <div class="media"></div>
+  <div class="body">
+    <h2>Anel Ciclos</h2>
+    <a class="lk" href="produto.html">Ver o produto &rarr;</a>
+  </div>
+</section>
+
+<!-- 7 · CONCEITUAL -->
+<section class="concept"></section>
+
+<!-- 8 · DUAS PECAS -->
+<section>
+  <div class="two">
+    <a class="pc"><div class="ph"></div><div class="n">Signet 01</div><div class="pr">Prata 925 &middot; Consultar</div></a>
+    <a class="pc"><div class="ph"></div><div class="n">Elo Ciclos</div><div class="pr">Mokume gane &middot; Consultar</div></a>
+  </div>
+</section>
+
+<!-- 9 · LINHA DE PRODUTOS + VIDEO -->
+<section>
+  <div class="ribbon" data-drag style="padding:4px">
+    <a class="p10"><div class="ph"></div><div class="n">Cushion</div><div class="pr">Consultar</div></a>
+    <a class="p10"><div class="ph"></div><div class="n">Dean Hoops</div><div class="pr">Consultar</div></a>
+    <a class="p10"><div class="ph"></div><div class="n">Jax Chain</div><div class="pr">Consultar</div></a>
+    <a class="p10"><div class="ph"></div><div class="n">Frame Hoop</div><div class="pr">Consultar</div></a>
+    <a class="p10"><div class="ph"></div><div class="n">Cove Collar</div><div class="pr">Consultar</div></a>
+    <a class="p10"><div class="ph"></div><div class="n">Ada Slim</div><div class="pr">Consultar</div></a>
+    <a class="p10"><div class="ph"></div><div class="n">Kim Ring</div><div class="pr">Consultar</div></a>
+    <a class="p10"><div class="ph"></div><div class="n">ID Pendant</div><div class="pr">Consultar</div></a>
+    <a class="p10"><div class="ph"></div><div class="n">Twist Hoop</div><div class="pr">Consultar</div></a>
+    <a class="p10"><div class="ph"></div><div class="n">Sphere</div><div class="pr">Consultar</div></a>
+  </div>
+  <div class="vslot"></div>
+</section>
+
+<!-- 10 · FOOTER -->
+<footer class="foot">
+  <div class="foot-top">
+    <div class="signup">
+      <h3>Novos projetos, colecoes e o ritual do narciso. Assine e saiba antes.</h3>
+      <form onsubmit="return false">
+        <input type="email" placeholder="Seu e-mail" aria-label="E-mail">
+        <button type="submit">Assinar</button>
+      </form>
+    </div>
+    <div class="links">
+      <div class="group"><h4>Marca</h4><ul>
+        <li><a href="#">Sobre a Grenier Ourivesaria</a></li>
+        <li><a href="#">Cookies</a></li>
+        <li><a href="#">Politica de Privacidade</a></li>
+      </ul></div>
+      <div class="group"><h4>Servico ao consumidor</h4><ul>
+        <li><a href="#">Contato</a></li>
+        <li><a href="#">Entrega</a></li>
+        <li><a href="#">Devolucoes</a></li>
+        <li><a href="#">Gravacao</a></li>
+        <li><a href="#">Agendar atendimento</a></li>
+      </ul></div>
+      <div class="group"><h4>Guias</h4><ul>
+        <li><a href="#">Tamanhos</a></li>
+        <li><a href="#">Cuidados com a joia</a></li>
+      </ul></div>
+      <div class="group"><h4>Midias sociais</h4><ul>
+        <li><a href="#">Instagram</a></li>
+      </ul></div>
+    </div>
+  </div>
+  <div class="wordmark"><div class="g">GRENIER</div><div class="o">OURIVESARIA</div></div>
+  <div class="legal">&copy; 2026 Grenier Ourivesaria</div>
+</footer>
+
+<script>
+document.querySelectorAll('.ribbon[data-drag]').forEach(function(r){
+  var down=false,sx=0,sl=0,mv=0;
+  r.addEventListener('pointerdown',function(e){down=true;sx=e.pageX;sl=r.scrollLeft;mv=0;r.classList.add('drag');});
+  r.addEventListener('pointermove',function(e){if(!down)return;var d=e.pageX-sx;mv=Math.abs(d);r.scrollLeft=sl-d;});
+  function up(){down=false;r.classList.remove('drag');}
+  r.addEventListener('pointerup',up);r.addEventListener('pointerleave',up);
+  r.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(e){if(mv>6)e.preventDefault();});});
+});
+</script>
+</body>
+</html>
